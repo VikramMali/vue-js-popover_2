@@ -1,7 +1,7 @@
 // UI Page Profile #187
 import rcrm_import from "/rcrm_import.js"
-Vue.component('inline_edit', {
-    name: 'inline_edit',
+Vue.component('inline-edit', {
+    name: 'inline-edit',
     props: ['value', 'update_column'],
     data() {
         return {
