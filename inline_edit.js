@@ -329,4 +329,4 @@ Vue.component('inline_edit', {
         </div>
     </div>
     `,
-}
+});
