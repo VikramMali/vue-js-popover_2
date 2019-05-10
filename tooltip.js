@@ -19,6 +19,10 @@ Vue.component('inline-edit', {
             type: String,
             default: ''
         },
+        'editstyle': {
+            type: String,
+            default: 'popover'
+        },
     },
     data() {
         return {
@@ -169,6 +173,7 @@ Vue.component('inline-edit', {
         this.$modal.list_page = undefined;
         */
     },
+    
     computed: {
         filteredDataObj() {
             return this.columns.filter((option) => {
@@ -179,10 +184,10 @@ Vue.component('inline-edit', {
             })
         }
     },
+
     template: `
     <div class="field rcrm-inline">
-        <p
-            v-tooltip.notrigger="{ html: 'popover'+$vnode.key, class: 'is-white'+toottipclass, visible: (visibility && edetable)}">
+        <p v-if="editstyle == 'popover'" v-tooltip.notrigger="{ html: 'popover'+$vnode.key, class: 'is-white'+toottipclass, visible: (visibility && edetable)}">
             <slot name="value_template" v-bind:entity="value">
 
                 <!-------------------------------------------------------------->
@@ -238,14 +243,75 @@ Vue.component('inline-edit', {
                 </template>
                 <!-------------------------------------------------------------->
             </slot>
-            <a v-if="edetable" @click="visibility = !visibility" class="edit-linline-icon color-black m-l-15"> <i
-                    class="mdi mdi-pencil"></i> </a>
+            <a v-if="edetable" @click="visibility = !visibility" class="edit-linline-icon color-black m-l-15"> 
+                <i class="mdi mdi-pencil"></i> 
+            </a>
         </p>
-        <div :id="'popover'+$vnode.key" class="rcrm-inline-content">
+
+        <p v-if="editstyle == 'inline'" :class="{'is-hidden': visibility}">
+            <slot name="value_template" v-bind:entity="value">
+
+                <!-------------------------------------------------------------->
+                <template v-if="!isempty(value[update_column.field]) && update_column.type == 'date'">
+                    {{ getDateTime(value[update_column.field]) }}
+                </template>
+                <template v-else-if="update_column.type == 'file'">
+                    <div class="field-body">
+                        <a v-if="value[update_column.field]" @click="viewFile(value[update_column.field])">
+                            <span v-tooltip="getFileName(value[update_column.field])"><svg
+                                    xmlns="http://www.w3.org/2000/svg" class="resume-icon" style="width:20px;height:20px"
+                                    viewBox="0 0 105.728 143.693">
+                                    <g id="Group_1" class="fill-icon" data-name="Group 1"
+                                        transform="translate(-604 -302.656)">
+                                        <path id="Path_2" data-name="Path 2" style="fill: #121ebd;"
+                                            d="M1306,385V528.349h105.728V419.731l-32.89-35.075Z"
+                                            transform="translate(-702 -82)"></path>
+                                        <path id="download-button" data-name="Path 6" class="cls-2"
+                                            d="M89.1,23.248H74.572V-13.063H52.779V23.248H38.25L63.675,48.673Z"
+                                            transform="translate(592.75 361.063)"></path>
+                                    </g>
+                                </svg></span>
+                        </a>
+                        <span v-else class="has-text-light">
+                            <span v-tooltip="'File Not Available'">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="resume-icon" style="width:20px;height:20px"
+                                    viewBox="0 0 105.728 143.693">
+                                    <g id="Group_1" class="empty-icon" data-name="Group 1"
+                                        transform="translate(-604 -302.656)">
+                                        <path id="Path_2" data-name="Path 2"
+                                            style="fill: #fff;stroke: #121ebd;stroke-width: 10px;"
+                                            d="M1306,385V528.349h105.728V419.731l-32.89-35.075Z"
+                                            transform="translate(-702 -82)"></path>
+                                    </g>
+                                </svg>
+                            </span>
+                        </span>
+                    </div>
+                </template>
+                <template v-else-if="update_column.type == 'checkbox'">
+                    {{ yesno(value[update_column.field]) }}
+                </template>
+                <template v-else-if="!isempty(update_column.display_column) && !isempty(value[update_column.field])">
+                    <span dir="auto"
+                        v-tooltip="value[update_column.display_column]">{{ _.truncate(value[update_column.display_column],{'length': 30, 'separator': ' '}) }}</span>
+                </template>
+                <template v-else-if="!isempty(value[update_column.field])">
+                    <span dir="auto" v-tooltip="value[update_column.field]"
+                        v-html="linkify(_.truncate(value[update_column.field],{'length': 30, 'separator': ' '}))"></span>
+                </template>
+                <template v-else>
+                    <span class="has-text-light">Not Available</span>
+                </template>
+                <!-------------------------------------------------------------->
+            </slot>
+            <a v-if="edetable" @click="visibility = !visibility" class="edit-linline-icon color-black m-l-15"> 
+                <i class="mdi mdi-pencil"></i> 
+            </a>
+        </p>
+        <div :id="'popover'+$vnode.key" :class="{'is-hidden': (!visibility && editstyle == 'inline'), 'rcrm-inline-content' : (editstyle == 'popover')}">
             <form style="display: inherit;" v-on:submit.prevent="updateFields()">
                 <b-field :type="errors.has(update_column.label) ? 'is-danger': ''"
-                    :message="errors.has(update_column.label) ? errors.first(update_column.label) : ''"
-                    :label="update_column.label">
+                    :message="errors.has(update_column.label) ? errors.first(update_column.label) : ''">
 
                     <b-input v-if="update_column.type == ''" id="sTests-" :name="update_column.label"
                         v-validate="'required|min:3'" type="text" value="" maxlength="40"
@@ -328,5 +394,5 @@ Vue.component('inline-edit', {
             </form>
         </div>
     </div>
-    `,
+    `
 });
