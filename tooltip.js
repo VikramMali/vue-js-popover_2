@@ -310,7 +310,7 @@ Vue.component('inline-edit', {
         </p>
         <div :id="'popover'+$vnode.key" :class="{'is-hidden': (!visibility && editstyle == 'inline'), 'rcrm-inline-content' : (editstyle == 'popover')}">
             <form style="display: inherit;" v-on:submit.prevent="updateFields()">
-                <b-field :type="errors.has(update_column.label) ? 'is-danger': ''"
+                <b-field :type="errors.has(update_column.label) ? 'is-danger': ''" :label="update_column.label"
                     :message="errors.has(update_column.label) ? errors.first(update_column.label) : ''">
 
                     <b-input v-if="update_column.type == ''" id="sTests-" :name="update_column.label"
