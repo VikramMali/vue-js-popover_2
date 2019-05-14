@@ -44,7 +44,6 @@ Vue.component('inline-edit', {
         // whenever question changes, this function will run
         value: function (newValue, oldValue) {
             if (newValue != oldValue) {
-                debugger;
                 this.update_field = newValue[this.update_column.field];
             }
         },
