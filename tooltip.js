@@ -321,16 +321,16 @@ Vue.component('inline-edit', {
                     <b-field :type="errors.has(update_column.label) ? 'is-danger': ''" :label="update_column.label"
                         :message="errors.has(update_column.label) ? errors.first(update_column.label) : ''">
                         <b-input v-if="update_column.type == ''" id="sTests-" :name="update_column.label" v-validate="'required|min:3'"
-                            type="text" value="" maxlength="40" placeholder="Select Field Name First">
+                            type="text" value="" :maxlength="update_column.dblength" placeholder="Select Field Name First">
                         </b-input>
     
                         <b-input v-if="update_column.type == 'text'" v-model="update_field" id="sTest-companyText"
-                            v-validate="'required|min:0'" type="text" :name="update_column.label" value="" maxlength="40"
+                            v-validate="'required|min:0'" type="text" :name="update_column.label" value="" :maxlength="update_column.dblength"
                             placeholder="Enter Text">
                         </b-input>
     
                         <b-input v-else-if="update_column.type == 'number'" v-model="update_field" id="sTest-companyNuber"
-                            type="number" value="" maxlength="40" :name="update_column.label" placeholder="Enter Here"
+                            type="number" value="" :maxlength="update_column.dblength" :name="update_column.label" placeholder="Enter Here"
                             v-validate="'required|min_value:0'">
                         </b-input>
 
