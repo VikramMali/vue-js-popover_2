@@ -242,9 +242,9 @@ Vue.component('inline-edit', {
                         <span dir="auto"
                             v-tooltip="value[update_column.display_column]">{{ _.truncate(value[update_column.display_column],{'length': 30, 'separator': ' '}) }}</span>
                     </template>
-                    <template v-else-if="!isempty(value[update_column.field])">
-                        <span dir="auto" v-tooltip="value[update_column.field]"
-                            v-html="linkify(_.truncate(value[update_column.field],{'length': 30, 'separator': ' '}))"></span>
+                    <template v-else-if="!isempty(value[update_column.field])">                        
+                        <span dir="auto"  v-tooltip="value[update_column.field]" class="text-truncate"
+                            v-html="linkify(value[update_column.field])"></span>
                     </template>
                     <template v-else>
                         <span class="has-text-light">Not Available</span>
@@ -304,8 +304,8 @@ Vue.component('inline-edit', {
                             v-tooltip="value[update_column.display_column]">{{ _.truncate(value[update_column.display_column],{'length': 30, 'separator': ' '}) }}</span>
                     </template>
                     <template v-else-if="!isempty(value[update_column.field])">
-                        <span dir="auto" v-tooltip="value[update_column.field]"
-                            v-html="linkify(_.truncate(value[update_column.field],{'length': 30, 'separator': ' '}))"></span>
+                        <span dir="auto"  v-tooltip="value[update_column.field]" class="text-truncate"
+                            v-html="linkify(value[update_column.field])"></span>
                     </template>
                     <template v-else>
                         <span class="has-text-light">Not Available</span>
